@@ -387,7 +387,8 @@ name,vendor,category,finish,color,particle_size_microns,solvent_safe,weight_g,vo
 
     function parseCSV(text){
       // Simple CSV parser (no external libs). Assumes commas, quotes escaped by doubling.
-      const lines = text.replace(//g,'').split('
+      const lines = text.replace(/
+/g,'').split('
 ').filter(l=>l.trim().length);
       const headers = lines.shift().split(',').map(h=>h.trim().toLowerCase());
       const idx = name=> headers.indexOf(name);
@@ -457,88 +458,29 @@ async function importFromFile(file){
 
     function populateFromJSON(){ /* if you later host inventory.json, replace DB here via fetch */ }
 
-    function fetchJSON(){
-      const banner = document.getElementById('statusBanner');
-      const url1 = './inventory.json?ts='+Date.now();
-      const url2 = (location.origin + location.pathname.replace(/\/$/, '')) + '/inventory.json?ts=' + Date.now();
-      banner.className = 'status-banner';
-      banner.textContent = 'Loading inventory.json…';
+function fetchJSON() {
+  const banner = document.getElementById('statusBanner');
+  const INVENTORY_URL = 'inventory.json?ts=' + Date.now(); // relative path is fine
 
-      // Helper: try a url with timeout and no-store cache
-      function tryFetch(url){
-        const supportsAbort = 'AbortController' in window;
-        const ctrl = supportsAbort ? new AbortController() : null;
-        const timer = setTimeout(()=>{
-          if(ctrl) ctrl.abort();
-        }, 12000);
-        return fetch(url, {signal: ctrl?ctrl.signal:undefined, cache:'no-store'})
-          .then(r=>{ clearTimeout(timer); if(!r.ok) throw new Error('HTTP '+r.status); return r.text(); })
-          .then(t=>{ try{ return JSON.parse(t); }catch(e){ throw new Error('invalid-json'); });
+  banner.className = 'status-banner';
+  banner.textContent = 'Loading inventory.json…';
+
+  return fetch(INVENTORY_URL, { cache: 'no-store' })
+    .then(r => {
+      if (!r.ok) {
+        banner.className = 'status-banner err';
+        banner.textContent = `inventory.json not found (HTTP ${r.status}).`;
+        throw new Error('not-found');
       }
-
-      // Try relative, then absolute; finally fall back to inline window.__INV__ if present
-      return tryFetch(url1)
-        .catch(()=> tryFetch(url2))
-        .catch(err=>{
-          if(window.__INV__){ return window.__INV__; }
-          banner.className = 'status-banner err';
-          banner.textContent = err.message==='invalid-json' ? 'inventory.json is not valid JSON.' : 'Could not load inventory.json (network or path error).';
-          throw err;
-        });
+      return r.json();
     })
-        .then(r=>{
-          clearTimeout(t);
-          if(!r.ok){
-            banner.className = 'status-banner err';
-            banner.textContent = `inventory.json not found (HTTP ${r.status}).`;
-            throw new Error('inventory.json not found');
-          }
-          return r.text();
-        })
-        .then(t=>{
-          try{ const json = JSON.parse(t); return json; }
-          catch(e){
-            banner.className = 'status-banner err';
-            banner.textContent = 'inventory.json is not valid JSON.';
-            throw e;
-          }
-        })
-        .catch(err=>{
-          if(err.name==='AbortError'){
-            banner.className = 'status-banner err';
-            banner.textContent = 'inventory.json request timed out. Try hard refresh (Cmd+Shift+R / Ctrl+F5).';
-          }
-          throw err;
-        });
-    }).`;
-            throw new Error('inventory.json not found');
-          }
-          return r.text();
-        })
-        .then(t=>{
-          try{ const json = JSON.parse(t); return json; }
-          catch(e){
-            banner.className = 'status-banner err';
-            banner.textContent = 'inventory.json is not valid JSON.';
-            throw e;
-          }
-        });
-    }).`;
-            throw new Error('inventory.json not found');
-          }
-          return r.text();
-        })
-        .then(t=>{
-          try{ return JSON.parse(t); }
-          catch(e){
-            const msg = 'inventory.json is not valid JSON.';
-            console.error(msg, e);
-            statusEl.textContent = msg;
-            throw e;
-          }
-        });
+    .catch(err => {
+      banner.className = 'status-banner err';
+      banner.textContent = 'Could not load inventory.json (' + err.message + ').';
+      throw err;
     });
-    }
+}
+
 
     async function init(){
       const banner = document.getElementById('statusBanner');
