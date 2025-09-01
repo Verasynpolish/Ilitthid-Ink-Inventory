@@ -7,7 +7,7 @@
   <style>
     :root{
       --bg:#0b0c10; --panel:#111318; --muted:#8a91a5; --text:#e8ecf1;
-      --chip:#1a1e27; --border:#1f2430; --good:#7ecb92; --warn:#ffd78b;
+      --chip:#1a1e27; --border:#1f2430; --warn:#ffd78b;
     }
     html,body{height:100%}
     body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif;background:#0b0c10;color:var(--text)}
@@ -19,7 +19,7 @@
     .search input{width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--border);background:#0f1218;color:var(--text);outline:none}
     .control{display:flex;gap:8px;align-items:center;background:#111318;padding:8px 10px;border-radius:12px;border:1px solid var(--border)}
     .control label{font-size:12px;color:var(--muted)}
-    select{background:#0f1218;color:var(--text);border:1px solid var(--border);border-radius:10px;padding:8px}
+    select{background:#0f1218;color:var(--text);border:1px solid var(--border);border-radius:10px;padding:8px;min-width:160px}
     .toolbar{display:flex;justify-content:space-between;align-items:center;margin:12px 0;gap:12px;flex-wrap:wrap}
     .count{font-size:12px;color:var(--muted)}
     .kpis{display:flex;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:12px;margin:6px 0 12px}
@@ -35,6 +35,8 @@
     .chip{font-size:11px;padding:4px 8px;background:var(--chip);border:1px solid var(--border);border-radius:999px;color:#cfe7ff}
     .price{margin-top:8px;font-size:13px}
     .warn{color:var(--warn)}
+    .btn{cursor:pointer;display:inline-flex;gap:8px;align-items:center;background:#111826;border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:10px}
+    .btn:hover{border-color:#2b3444}
   </style>
 </head>
 <body>
@@ -64,14 +66,13 @@
           <option value="date_asc">Oldest first</option>
         </select>
       </div>
-      <button class="btn" id="clear" style="display:none">Clear</button>
+      <button class="btn" id="clear">Clear filters</button>
     </div>
   </header>
 
   <main class="container">
     <div class="toolbar">
       <div class="count" id="count">0 items</div>
-      <!-- CSV/JSON tools removed per request -->
     </div>
 
     <div class="kpis">
@@ -85,565 +86,216 @@
   </main>
 
   <script>
-    // ========= INLINE DATA (prices blank, locations blank) =========
-    // Add/adjust image_url later (e.g. "images/filename.jpg" or a full https URL)
-
-    // helper to convert 1/2 ounce to grams for glow powders
-    function halfOzToG(){ return 28.3495 / 2; } // 14.17475 g
+    // === Inline data (prices & locations blank) ===
+    function halfOzToG(){ return 28.3495/2; } // 14.17475 g
 
     window.__INV__ = [
-      // --- Spectraflair4U (AFOC-412538 & extras you listed)
+      /* --------- GLITTER UNIQUE (pigments & glitters only) --------- */
       {
-        "id": "SF-STK27",
-        "name": "Holographic Geometric Pigment .002×.002 — Silver (STK27)",
-        "vendor": "Spectraflair4U",
+        "id": "GU-UA06",
+        "name": "Ultra Aurora 06",
+        "vendor": "Glitter Unique",
+        "category": "Pigment",
+        "finish": "Interference",
+        "color": "Blue",
+        "particle_size_microns": "10–20",
+        "solvent_safe": true,
+        "weight_g": 5,
+        "volume_ml": null,
+        "price_usd": null,
+        "order_id": "GU-88231",
+        "order_date": "2025-08-10",
+        "location": "",
+        "notes": "fine overlay shimmer",
+        "image_url": ""
+      },
+      {
+        "id": "GU-IRID-BG-SQ035-1_2oz",
+        "name": "Blue-Green Iridescent Square .035 — 1/2 oz",
+        "vendor": "Glitter Unique",
+        "category": "Glitter",
+        "finish": "Iridescent",
+        "color": "Blue/Green",
+        "particle_size_microns": "",
+        "solvent_safe": true,
+        "weight_g": null,
+        "volume_ml": null,
+        "price_usd": null,
+        "order_id": "45609",
+        "order_date": "2025-08-25",
+        "location": "",
+        "notes": "SKU IRIDBGSQ035-0002",
+        "image_url": ""
+      },
+      {
+        "id": "GU-BLKHLSQ035-1_2oz",
+        "name": "Black Holo Square .035 — 1/2 oz",
+        "vendor": "Glitter Unique",
+        "category": "Glitter",
+        "finish": "Holographic",
+        "color": "Black",
+        "particle_size_microns": "",
+        "solvent_safe": true,
+        "weight_g": null,
+        "volume_ml": null,
+        "price_usd": null,
+        "order_id": "45609",
+        "order_date": "2025-08-25",
+        "location": "",
+        "notes": "SKU BLKHLSQ035-0002",
+        "image_url": ""
+      },
+      {
+        "id": "GU-IRID-PB-MicroShreds-1tsp",
+        "name": "Purple-Blue Iridescent Micro Shreds — 1 tsp",
+        "vendor": "Glitter Unique",
+        "category": "Glitter",
+        "finish": "Iridescent",
+        "color": "Purple/Blue",
+        "particle_size_microns": "",
+        "solvent_safe": true,
+        "weight_g": null,
+        "volume_ml": null,
+        "price_usd": null,
+        "order_id": "45609",
+        "order_date": "2025-08-25",
+        "location": "",
+        "notes": "SKU IRIDPBMSHR-0001",
+        "image_url": ""
+      },
+      {
+        "id": "GU-IRID-PB-H008-1_2oz",
+        "name": "Purple-Blue Iridescent Hex .008 — 1/2 oz",
+        "vendor": "Glitter Unique",
+        "category": "Glitter",
+        "finish": "Iridescent",
+        "color": "Purple/Blue",
+        "particle_size_microns": "",
+        "solvent_safe": true,
+        "weight_g": null,
+        "volume_ml": null,
+        "price_usd": null,
+        "order_id": "45609",
+        "order_date": "2025-08-25",
+        "location": "",
+        "notes": "SKU IRIDPRPH008-0002",
+        "image_url": ""
+      },
+      {
+        "id": "GU-IRID-PB-H015-1_2oz",
+        "name": "Purple-Blue Iridescent Hex .015 — 1/2 oz",
+        "vendor": "Glitter Unique",
+        "category": "Glitter",
+        "finish": "Iridescent",
+        "color": "Purple/Blue",
+        "particle_size_microns": "",
+        "solvent_safe": true,
+        "weight_g": null,
+        "volume_ml": null,
+        "price_usd": null,
+        "order_id": "45609",
+        "order_date": "2025-08-25",
+        "location": "",
+        "notes": "SKU IRIDPRPBH015-0002",
+        "image_url": ""
+      },
+      {
+        "id": "GU-IRID-PB-SQ035-1_2oz",
+        "name": "Purple-Blue Iridescent Square .035 — 1/2 oz",
+        "vendor": "Glitter Unique",
+        "category": "Glitter",
+        "finish": "Iridescent",
+        "color": "Purple/Blue",
+        "particle_size_microns": "",
+        "solvent_safe": true,
+        "weight_g": null,
+        "volume_ml": null,
+        "price_usd": null,
+        "order_id": "45609",
+        "order_date": "2025-08-25",
+        "location": "",
+        "notes": "SKU IRIDPRPSQ035-0002",
+        "image_url": ""
+      },
+      {
+        "id": "GU-SLV-HOLO-MicroShreds-1_2oz",
+        "name": "Silver Holo Micro Shreds — 1/2 oz",
+        "vendor": "Glitter Unique",
         "category": "Glitter",
         "finish": "Holographic",
         "color": "Silver",
-        "particle_size_microns": "≈50",
-        "solvent_safe": true,
-        "weight_g": 5,
-        "volume_ml": null,
-        "price_usd": null,
-        "order_id": "AFOC-412538",
-        "order_date": "2025-08-24",
-        "location": "",
-        "notes": "",
-        "image_url": ""
-      },
-      {
-        "id": "SF-STK28",
-        "name": "Holographic Geometric Pigment .002×.002 — Gold (STK28)",
-        "vendor": "Spectraflair4U",
-        "category": "Glitter",
-        "finish": "Holographic",
-        "color": "Gold",
-        "particle_size_microns": "≈50",
-        "solvent_safe": true,
-        "weight_g": 5,
-        "volume_ml": null,
-        "price_usd": null,
-        "order_id": "AFOC-412538",
-        "order_date": "2025-08-24",
-        "location": "",
-        "notes": "",
-        "image_url": ""
-      },
-      {
-        "id": "SF-STK29",
-        "name": "Clear Holographic Geometric Pigment .008×.008 (1/125\") — 1/2 oz (STK29)",
-        "vendor": "Spectraflair4U",
-        "category": "Glitter",
-        "finish": "Holographic",
-        "color": "Clear",
-        "particle_size_microns": "",
-        "solvent_safe": true,
-        "weight_g": null,  /* 1/2 oz container — grams not specified; leave null unless you want me to estimate */
-        "volume_ml": null,
-        "price_usd": null,
-        "order_id": "AFOC-412538",
-        "order_date": "2025-08-24",
-        "location": "",
-        "notes": "",
-        "image_url": ""
-      },
-      {
-        "id": "SF-STK30",
-        "name": "Clear Holographic Geometric Pigment .004×.004 (1/256\") — 1/2 oz (STK30)",
-        "vendor": "Spectraflair4U",
-        "category": "Glitter",
-        "finish": "Holographic",
-        "color": "Clear",
         "particle_size_microns": "",
         "solvent_safe": true,
         "weight_g": null,
         "volume_ml": null,
         "price_usd": null,
-        "order_id": "AFOC-412538",
-        "order_date": "2025-08-24",
+        "order_id": "45609",
+        "order_date": "2025-08-25",
         "location": "",
-        "notes": "",
+        "notes": "SKU SLVHLMSHR-0002",
         "image_url": ""
       },
       {
-        "id": "SF-NRG8-1",
-        "name": "Neon Round Dots Glitter .8mm — White (NRG.8-1) / 5 g",
-        "vendor": "Spectraflair4U",
-        "category": "Glitter",
-        "finish": "Neon",
-        "color": "White",
+        "id": "GU-JAPSP",
+        "name": "Jelly Aurora Pigment Sample Pack",
+        "vendor": "Glitter Unique",
+        "category": "Pigment",
+        "finish": "Iridescent",
+        "color": "Mixed",
         "particle_size_microns": "",
         "solvent_safe": true,
-        "weight_g": 5,
+        "weight_g": null,
         "volume_ml": null,
         "price_usd": null,
-        "order_id": "AFOC-412538",
-        "order_date": "2025-08-24",
+        "order_id": "45609",
+        "order_date": "2025-08-25",
         "location": "",
-        "notes": "",
-        "image_url": ""
-      },
-      {
-        "id": "SF-NRG8-10",
-        "name": "Neon Round Dots Glitter .8mm — Fuchsia (NRG.8-10) / 5 g",
-        "vendor": "Spectraflair4U",
-        "category": "Glitter",
-        "finish": "Neon",
-        "color": "Fuchsia",
-        "particle_size_microns": "",
-        "solvent_safe": true,
-        "weight_g": 5,
-        "volume_ml": null,
-        "price_usd": null,
-        "order_id": "AFOC-412538",
-        "order_date": "2025-08-24",
-        "location": "",
-        "notes": "",
+        "notes": "Sample pack",
         "image_url": ""
       },
 
-      // --- Techno Glow (199738 + your added list) — using 1/2 oz ≈ 14.17475 g
-      {
-        "id": "TG-invisible-purple-1_2oz",
-        "name": "Invisible Purple Glow in the Dark & UV Powder — 35 µm",
-        "vendor": "Techno Glow",
-        "category": "Pigment",
-        "finish": "Glow/UV",
-        "color": "Invisible Purple",
-        "particle_size_microns": "35",
-        "solvent_safe": true,
-        "weight_g": 14.17475,
-        "volume_ml": null,
-        "price_usd": null,
-        "order_id": "199738",
-        "order_date": "2025-08-24",
-        "location": "",
-        "notes": "1/2 oz",
-        "image_url": ""
-      },
-      {
-        "id": "TG-fluoro-yellow-green-1_2oz",
-        "name": "Fluorescent Yellow Green Glow in the Dark & UV Powder — 35 µm",
-        "vendor": "Techno Glow",
-        "category": "Pigment",
-        "finish": "Glow/UV",
-        "color": "Fluorescent Yellow-Green",
-        "particle_size_microns": "35",
-        "solvent_safe": true,
-        "weight_g": 14.17475,
-        "volume_ml": null,
-        "price_usd": null,
-        "order_id": "199738",
-        "order_date": "2025-08-24",
-        "location": "",
-        "notes": "1/2 oz",
-        "image_url": ""
-      },
-      {
-        "id": "TG-fluoro-orange-1_2oz-x2",
-        "name": "Fluorescent Orange Glow in the Dark & UV Powder — 35 µm",
-        "vendor": "Techno Glow",
-        "category": "Pigment",
-        "finish": "Glow/UV",
-        "color": "Fluorescent Orange",
-        "particle_size_microns": "35",
-        "solvent_safe": true,
-        "weight_g": 14.17475,
-        "volume_ml": null,
-        "price_usd": null,
-        "order_id": "199738",
-        "order_date": "2025-08-24",
-        "location": "",
-        "notes": "1/2 oz (x2 items ordered)",
-        "image_url": ""
-      },
-      {
-        "id": "TG-fluoro-pink-to-rust-1_2oz",
-        "name": "Fluorescent Pink to Rust Glow in the Dark & UV Powder — 35 µm",
-        "vendor": "Techno Glow",
-        "category": "Pigment",
-        "finish": "Glow/UV",
-        "color": "Fluorescent Pink→Rust",
-        "particle_size_microns": "35",
-        "solvent_safe": true,
-        "weight_g": 14.17475,
-        "volume_ml": null,
-        "price_usd": null,
-        "order_id": "199738",
-        "order_date": "2025-08-24",
-        "location": "",
-        "notes": "1/2 oz",
-        "image_url": ""
-      },
-      {
-        "id": "TG-green-zns-1_2oz",
-        "name": "Green Glow in the Dark & UV Powder — Zinc Sulfide",
-        "vendor": "Techno Glow",
-        "category": "Pigment",
-        "finish": "Glow",
-        "color": "Green (ZnS)",
-        "particle_size_microns": "",
-        "solvent_safe": true,
-        "weight_g": 14.17475,
-        "volume_ml": null,
-        "price_usd": null,
-        "order_id": "199738",
-        "order_date": "2025-08-24",
-        "location": "",
-        "notes": "1/2 oz",
-        "image_url": ""
-      },
+      /* --------- SPECTRAFLAIR4U (your previous list) --------- */
+      { "id":"SF-STK27","name":"Holographic Geometric Pigment .002×.002 — Silver (STK27)","vendor":"Spectraflair4U","category":"Glitter","finish":"Holographic","color":"Silver","particle_size_microns":"≈50","solvent_safe":true,"weight_g":5,"volume_ml":null,"price_usd":null,"order_id":"AFOC-412538","order_date":"2025-08-24","location":"","notes":"","image_url":"" },
+      { "id":"SF-STK28","name":"Holographic Geometric Pigment .002×.002 — Gold (STK28)","vendor":"Spectraflair4U","category":"Glitter","finish":"Holographic","color":"Gold","particle_size_microns":"≈50","solvent_safe":true,"weight_g":5,"volume_ml":null,"price_usd":null,"order_id":"AFOC-412538","order_date":"2025-08-24","location":"","notes":"","image_url":"" },
+      { "id":"SF-STK29","name":"Clear Holographic Geometric Pigment .008×.008 — 1/2 oz (STK29)","vendor":"Spectraflair4U","category":"Glitter","finish":"Holographic","color":"Clear","particle_size_microns":"","solvent_safe":true,"weight_g":null,"volume_ml":null,"price_usd":null,"order_id":"AFOC-412538","order_date":"2025-08-24","location":"","notes":"","image_url":"" },
+      { "id":"SF-STK30","name":"Clear Holographic Geometric Pigment .004×.004 — 1/2 oz (STK30)","vendor":"Spectraflair4U","category":"Glitter","finish":"Holographic","color":"Clear","particle_size_microns":"","solvent_safe":true,"weight_g":null,"volume_ml":null,"price_usd":null,"order_id":"AFOC-412538","order_date":"2025-08-24","location":"","notes":"","image_url":"" },
+      { "id":"SF-NRG8-1","name":"Neon Round Dots .8mm — White (NRG.8-1) / 5 g","vendor":"Spectraflair4U","category":"Glitter","finish":"Neon","color":"White","particle_size_microns":"","solvent_safe":true,"weight_g":5,"volume_ml":null,"price_usd":null,"order_id":"AFOC-412538","order_date":"2025-08-24","location":"","notes":"","image_url":"" },
+      { "id":"SF-NRG8-10","name":"Neon Round Dots .8mm — Fuchsia (NRG.8-10) / 5 g","vendor":"Spectraflair4U","category":"Glitter","finish":"Neon","color":"Fuchsia","particle_size_microns":"","solvent_safe":true,"weight_g":5,"volume_ml":null,"price_usd":null,"order_id":"AFOC-412538","order_date":"2025-08-24","location":"","notes":"","image_url":"" },
 
-      // --- SolarColorDust (48820)
-      {
-        "id": "SCD-AngelHolo-1g",
-        "name": "Angel Holo™ — Clear Holographic Powder",
-        "vendor": "SolarColorDust",
-        "category": "Pigment",
-        "finish": "Holographic",
-        "color": "Clear Holo",
-        "particle_size_microns": "",
-        "solvent_safe": true,
-        "weight_g": 1,
-        "volume_ml": null,
-        "price_usd": null,
-        "order_id": "48820",
-        "order_date": "2025-08-24",
-        "location": "",
-        "notes": "",
-        "image_url": ""
-      },
-      {
-        "id": "SCD-KS-Zephyr",
-        "name": "KaleidoShift® — Zephyr",
-        "vendor": "SolarColorDust",
-        "category": "Pigment",
-        "finish": "Color Shift",
-        "color": "Blue/Green/Purple",
-        "particle_size_microns": "",
-        "solvent_safe": true,
-        "weight_g": null,
-        "volume_ml": null,
-        "price_usd": null,
-        "order_id": "48820",
-        "order_date": "2025-08-24",
-        "location": "",
-        "notes": "",
-        "image_url": ""
-      },
-      {
-        "id": "SCD-KS-Cosmos",
-        "name": "KaleidoShift® — Cosmos",
-        "vendor": "SolarColorDust",
-        "category": "Pigment",
-        "finish": "Color Shift",
-        "color": "Color Shift",
-        "particle_size_microns": "",
-        "solvent_safe": true,
-        "weight_g": null,
-        "volume_ml": null,
-        "price_usd": null,
-        "order_id": "48820",
-        "order_date": "2025-08-24",
-        "location": "",
-        "notes": "",
-        "image_url": ""
-      },
-      {
-        "id": "SCD-ED-Splendor",
-        "name": "Ethereal Dust — Splendor",
-        "vendor": "SolarColorDust",
-        "category": "Pigment",
-        "finish": "Chameleon",
-        "color": "Ethereal",
-        "particle_size_microns": "",
-        "solvent_safe": true,
-        "weight_g": null,
-        "volume_ml": null,
-        "price_usd": null,
-        "order_id": "48820",
-        "order_date": "2025-08-24",
-        "location": "",
-        "notes": "",
-        "image_url": ""
-      },
-      {
-        "id": "SCD-ED-Aerial",
-        "name": "Ethereal Dust — Aerial",
-        "vendor": "SolarColorDust",
-        "category": "Pigment",
-        "finish": "Chameleon",
-        "color": "Ethereal",
-        "particle_size_microns": "",
-        "solvent_safe": true,
-        "weight_g": null,
-        "volume_ml": null,
-        "price_usd": null,
-        "order_id": "48820",
-        "order_date": "2025-08-24",
-        "location": "",
-        "notes": "",
-        "image_url": ""
-      },
+      /* --------- TECHNOGLOW --------- */
+      { "id":"TG-invisible-purple-1_2oz","name":"Invisible Purple Glow in the Dark & UV Powder — 35 µm","vendor":"Techno Glow","category":"Pigment","finish":"Glow/UV","color":"Invisible Purple","particle_size_microns":"35","solvent_safe":true,"weight_g":14.17475,"volume_ml":null,"price_usd":null,"order_id":"199738","order_date":"2025-08-24","location":"","notes":"1/2 oz","image_url":"" },
+      { "id":"TG-fluoro-yellow-green-1_2oz","name":"Fluorescent Yellow-Green Glow in the Dark & UV Powder — 35 µm","vendor":"Techno Glow","category":"Pigment","finish":"Glow/UV","color":"Yellow-Green","particle_size_microns":"35","solvent_safe":true,"weight_g":14.17475,"volume_ml":null,"price_usd":null,"order_id":"199738","order_date":"2025-08-24","location":"","notes":"1/2 oz","image_url":"" },
+      { "id":"TG-fluoro-orange-1_2oz","name":"Fluorescent Orange Glow in the Dark & UV Powder — 35 µm","vendor":"Techno Glow","category":"Pigment","finish":"Glow/UV","color":"Orange","particle_size_microns":"35","solvent_safe":true,"weight_g":14.17475,"volume_ml":null,"price_usd":null,"order_id":"199738","order_date":"2025-08-24","location":"","notes":"1/2 oz (x2 ordered)","image_url":"" },
+      { "id":"TG-fluoro-pink-to-rust-1_2oz","name":"Fluorescent Pink→Rust Glow in the Dark & UV Powder — 35 µm","vendor":"Techno Glow","category":"Pigment","finish":"Glow/UV","color":"Pink→Rust","particle_size_microns":"35","solvent_safe":true,"weight_g":14.17475,"volume_ml":null,"price_usd":null,"order_id":"199738","order_date":"2025-08-24","location":"","notes":"1/2 oz","image_url":"" },
+      { "id":"TG-green-zns-1_2oz","name":"Green Glow in the Dark & UV Powder — Zinc Sulfide","vendor":"Techno Glow","category":"Pigment","finish":"Glow","color":"Green (ZnS)","particle_size_microns":"","solvent_safe":true,"weight_g":14.17475,"volume_ml":null,"price_usd":null,"order_id":"199738","order_date":"2025-08-24","location":"","notes":"1/2 oz","image_url":"" },
 
-      // --- Just Pigments (#54021)
-      {
-        "id": "JP-OMPT-CS",
-        "name": "Orange Magenta Purple Super Color Shift (Chameleon) — Sample",
-        "vendor": "Just Pigments",
-        "category": "Pigment",
-        "finish": "Chameleon",
-        "color": "Orange/Magenta/Purple",
-        "particle_size_microns": "",
-        "solvent_safe": true,
-        "weight_g": 2,
-        "volume_ml": null,
-        "price_usd": null,
-        "order_id": "54021",
-        "order_date": "2025-08-24",
-        "location": "",
-        "notes": "Sample",
-        "image_url": ""
-      },
-      {
-        "id": "JP-OMT-CS",
-        "name": "Orange Magenta Teal Super Color Shift (Chameleon) — Sample",
-        "vendor": "Just Pigments",
-        "category": "Pigment",
-        "finish": "Chameleon",
-        "color": "Orange/Magenta/Teal",
-        "particle_size_microns": "",
-        "solvent_safe": true,
-        "weight_g": 2,
-        "volume_ml": null,
-        "price_usd": null,
-        "order_id": "54021",
-        "order_date": "2025-08-24",
-        "location": "",
-        "notes": "Sample",
-        "image_url": ""
-      },
-      {
-        "id": "JP-BGY-CS",
-        "name": "Blue Green Yellow Super Color Shift (Chameleon) — Sample",
-        "vendor": "Just Pigments",
-        "category": "Pigment",
-        "finish": "Chameleon",
-        "color": "Blue/Green/Yellow",
-        "particle_size_microns": "",
-        "solvent_safe": true,
-        "weight_g": 2,
-        "volume_ml": null,
-        "price_usd": null,
-        "order_id": "54021",
-        "order_date": "2025-08-24",
-        "location": "",
-        "notes": "Sample",
-        "image_url": ""
-      },
-      {
-        "id": "JP-FineWhiteSatin-30g",
-        "name": "Fine White Satin",
-        "vendor": "Just Pigments",
-        "category": "Pigment",
-        "finish": "Satin",
-        "color": "White",
-        "particle_size_microns": "5–25",
-        "solvent_safe": true,
-        "weight_g": 30,
-        "volume_ml": null,
-        "price_usd": null,
-        "order_id": "54021",
-        "order_date": "2025-08-24",
-        "location": "",
-        "notes": "",
-        "image_url": ""
-      },
-      {
-        "id": "JP-Satin-Gold-2g",
-        "name": "Satin Gold — Sample",
-        "vendor": "Just Pigments",
-        "category": "Pigment",
-        "finish": "Satin",
-        "color": "Gold",
-        "particle_size_microns": "",
-        "solvent_safe": true,
-        "weight_g": 2,
-        "volume_ml": null,
-        "price_usd": null,
-        "order_id": "54021",
-        "order_date": "2025-08-24",
-        "location": "",
-        "notes": "Sample",
-        "image_url": ""
-      },
-      {
-        "id": "JP-Satin-Blue-2g",
-        "name": "Satin Blue — Sample",
-        "vendor": "Just Pigments",
-        "category": "Pigment",
-        "finish": "Satin",
-        "color": "Blue",
-        "particle_size_microns": "",
-        "solvent_safe": true,
-        "weight_g": 2,
-        "volume_ml": null,
-        "price_usd": null,
-        "order_id": "54021",
-        "order_date": "2025-08-24",
-        "location": "",
-        "notes": "Sample",
-        "image_url": ""
-      },
-      {
-        "id": "JP-Satin-Green-2g",
-        "name": "Satin Green — Sample",
-        "vendor": "Just Pigments",
-        "category": "Pigment",
-        "finish": "Satin",
-        "color": "Green",
-        "particle_size_microns": "",
-        "solvent_safe": true,
-        "weight_g": 2,
-        "volume_ml": null,
-        "price_usd": null,
-        "order_id": "54021",
-        "order_date": "2025-08-24",
-        "location": "",
-        "notes": "Sample",
-        "image_url": ""
-      },
-      {
-        "id": "JP-Satin-Red-2g",
-        "name": "Satin Red — Sample",
-        "vendor": "Just Pigments",
-        "category": "Pigment",
-        "finish": "Satin",
-        "color": "Red",
-        "particle_size_microns": "",
-        "solvent_safe": true,
-        "weight_g": 2,
-        "volume_ml": null,
-        "price_usd": null,
-        "order_id": "54021",
-        "order_date": "2025-08-24",
-        "location": "",
-        "notes": "Sample",
-        "image_url": ""
-      },
-      {
-        "id": "JP-Satin-Violet-2g",
-        "name": "Satin Violet — Sample",
-        "vendor": "Just Pigments",
-        "category": "Pigment",
-        "finish": "Satin",
-        "color": "Violet",
-        "particle_size_microns": "",
-        "solvent_safe": true,
-        "weight_g": 2,
-        "volume_ml": null,
-        "price_usd": null,
-        "order_id": "54021",
-        "order_date": "2025-08-24",
-        "location": "",
-        "notes": "Sample",
-        "image_url": ""
-      },
-      {
-        "id": "JP-Brown-FeOx-30g",
-        "name": "Brown Iron Oxide (L)",
-        "vendor": "Just Pigments",
-        "category": "Pigment",
-        "finish": "—",
-        "color": "Brown",
-        "particle_size_microns": "",
-        "solvent_safe": true,
-        "weight_g": 30,
-        "volume_ml": null,
-        "price_usd": null,
-        "order_id": "54021",
-        "order_date": "2025-08-24",
-        "location": "",
-        "notes": "",
-        "image_url": ""
-      },
-      {
-        "id": "JP-Yellow-FeOx-30g",
-        "name": "Yellow Iron Oxide",
-        "vendor": "Just Pigments",
-        "category": "Pigment",
-        "finish": "—",
-        "color": "Yellow",
-        "particle_size_microns": "",
-        "solvent_safe": true,
-        "weight_g": 30,
-        "volume_ml": null,
-        "price_usd": null,
-        "order_id": "54021",
-        "order_date": "2025-08-24",
-        "location": "",
-        "notes": "",
-        "image_url": ""
-      },
-      {
-        "id": "JP-Red-FeOx-30g",
-        "name": "Red Iron Oxide (R)",
-        "vendor": "Just Pigments",
-        "category": "Pigment",
-        "finish": "—",
-        "color": "Red",
-        "particle_size_microns": "",
-        "solvent_safe": true,
-        "weight_g": 30,
-        "volume_ml": null,
-        "price_usd": null,
-        "order_id": "54021",
-        "order_date": "2025-08-24",
-        "location": "",
-        "notes": "",
-        "image_url": ""
-      },
-      {
-        "id": "JP-Manganese-Violet-2g",
-        "name": "Manganese Violet — Sample",
-        "vendor": "Just Pigments",
-        "category": "Pigment",
-        "finish": "—",
-        "color": "Violet",
-        "particle_size_microns": "",
-        "solvent_safe": true,
-        "weight_g": 2,
-        "volume_ml": null,
-        "price_usd": null,
-        "order_id": "54021",
-        "order_date": "2025-08-24",
-        "location": "",
-        "notes": "Sample",
-        "image_url": ""
-      },
-      {
-        "id": "JP-DCRed27-2g",
-        "name": "D&C Red #27 Aluminum Lake — Sample",
-        "vendor": "Just Pigments",
-        "category": "Pigment",
-        "finish": "—",
-        "color": "Red",
-        "particle_size_microns": "",
-        "solvent_safe": true,
-        "weight_g": 2,
-        "volume_ml": null,
-        "price_usd": null,
-        "order_id": "54021",
-        "order_date": "2025-08-24",
-        "location": "",
-        "notes": "Sample",
-        "image_url": ""
-      }
+      /* --------- SOLARCOLORDUST --------- */
+      { "id":"SCD-AngelHolo-1g","name":"Angel Holo™ — Clear Holographic Powder","vendor":"SolarColorDust","category":"Pigment","finish":"Holographic","color":"Clear Holo","particle_size_microns":"","solvent_safe":true,"weight_g":1,"volume_ml":null,"price_usd":null,"order_id":"48820","order_date":"2025-08-24","location":"","notes":"","image_url":"" },
+      { "id":"SCD-KS-Zephyr","name":"KaleidoShift® — Zephyr","vendor":"SolarColorDust","category":"Pigment","finish":"Color Shift","color":"Blue/Green/Purple","particle_size_microns":"","solvent_safe":true,"weight_g":null,"volume_ml":null,"price_usd":null,"order_id":"48820","order_date":"2025-08-24","location":"","notes":"","image_url":"" },
+      { "id":"SCD-KS-Cosmos","name":"KaleidoShift® — Cosmos","vendor":"SolarColorDust","category":"Pigment","finish":"Color Shift","color":"Color Shift","particle_size_microns":"","solvent_safe":true,"weight_g":null,"volume_ml":null,"price_usd":null,"order_id":"48820","order_date":"2025-08-24","location":"","notes":"","image_url":"" },
+      { "id":"SCD-ED-Splendor","name":"Ethereal Dust — Splendor","vendor":"SolarColorDust","category":"Pigment","finish":"Chameleon","color":"Ethereal","particle_size_microns":"","solvent_safe":true,"weight_g":null,"volume_ml":null,"price_usd":null,"order_id":"48820","order_date":"2025-08-24","location":"","notes":"","image_url":"" },
+      { "id":"SCD-ED-Aerial","name":"Ethereal Dust — Aerial","vendor":"SolarColorDust","category":"Pigment","finish":"Chameleon","color":"Ethereal","particle_size_microns":"","solvent_safe":true,"weight_g":null,"volume_ml":null,"price_usd":null,"order_id":"48820","order_date":"2025-08-24","location":"","notes":"","image_url":"" },
+
+      /* --------- JUST PIGMENTS --------- */
+      { "id":"JP-OMPT-CS","name":"Orange Magenta Purple Super Color Shift (Chameleon) — Sample","vendor":"Just Pigments","category":"Pigment","finish":"Chameleon","color":"Orange/Magenta/Purple","particle_size_microns":"","solvent_safe":true,"weight_g":2,"volume_ml":null,"price_usd":null,"order_id":"54021","order_date":"2025-08-24","location":"","notes":"Sample","image_url":"" },
+      { "id":"JP-OMT-CS","name":"Orange Magenta Teal Super Color Shift (Chameleon) — Sample","vendor":"Just Pigments","category":"Pigment","finish":"Chameleon","color":"Orange/Magenta/Teal","particle_size_microns":"","solvent_safe":true,"weight_g":2,"volume_ml":null,"price_usd":null,"order_id":"54021","order_date":"2025-08-24","location":"","notes":"Sample","image_url":"" },
+      { "id":"JP-BGY-CS","name":"Blue Green Yellow Super Color Shift (Chameleon) — Sample","vendor":"Just Pigments","category":"Pigment","finish":"Chameleon","color":"Blue/Green/Yellow","particle_size_microns":"","solvent_safe":true,"weight_g":2,"volume_ml":null,"price_usd":null,"order_id":"54021","order_date":"2025-08-24","location":"","notes":"Sample","image_url":"" },
+      { "id":"JP-FineWhiteSatin-30g","name":"Fine White Satin","vendor":"Just Pigments","category":"Pigment","finish":"Satin","color":"White","particle_size_microns":"5–25","solvent_safe":true,"weight_g":30,"volume_ml":null,"price_usd":null,"order_id":"54021","order_date":"2025-08-24","location":"","notes":"","image_url":"" },
+      { "id":"JP-Satin-Gold-2g","name":"Satin Gold — Sample","vendor":"Just Pigments","category":"Pigment","finish":"Satin","color":"Gold","particle_size_microns":"","solvent_safe":true,"weight_g":2,"volume_ml":null,"price_usd":null,"order_id":"54021","order_date":"2025-08-24","location":"","notes":"Sample","image_url":"" },
+      { "id":"JP-Satin-Blue-2g","name":"Satin Blue — Sample","vendor":"Just Pigments","category":"Pigment","finish":"Satin","color":"Blue","particle_size_microns":"","solvent_safe":true,"weight_g":2,"volume_ml":null,"price_usd":null,"order_id":"54021","order_date":"2025-08-24","location":"","notes":"Sample","image_url":"" },
+      { "id":"JP-Satin-Green-2g","name":"Satin Green — Sample","vendor":"Just Pigments","category":"Pigment","finish":"Satin","color":"Green","particle_size_microns":"","solvent_safe":true,"weight_g":2,"volume_ml":null,"price_usd":null,"order_id":"54021","order_date":"2025-08-24","location":"","notes":"Sample","image_url":"" },
+      { "id":"JP-Satin-Red-2g","name":"Satin Red — Sample","vendor":"Just Pigments","category":"Pigment","finish":"Satin","color":"Red","particle_size_microns":"","solvent_safe":true,"weight_g":2,"volume_ml":null,"price_usd":null,"order_id":"54021","order_date":"2025-08-24","location":"","notes":"Sample","image_url":"" },
+      { "id":"JP-Satin-Violet-2g","name":"Satin Violet — Sample","vendor":"Just Pigments","category":"Pigment","finish":"Satin","color":"Violet","particle_size_microns":"","solvent_safe":true,"weight_g":2,"volume_ml":null,"price_usd":null,"order_id":"54021","order_date":"2025-08-24","location":"","notes":"Sample","image_url":"" },
+      { "id":"JP-Brown-FeOx-30g","name":"Brown Iron Oxide (L)","vendor":"Just Pigments","category":"Pigment","finish":"—","color":"Brown","particle_size_microns":"","solvent_safe":true,"weight_g":30,"volume_ml":null,"price_usd":null,"order_id":"54021","order_date":"2025-08-24","location":"","notes":"","image_url":"" },
+      { "id":"JP-Yellow-FeOx-30g","name":"Yellow Iron Oxide","vendor":"Just Pigments","category":"Pigment","finish":"—","color":"Yellow","particle_size_microns":"","solvent_safe":true,"weight_g":30,"volume_ml":null,"price_usd":null,"order_id":"54021","order_date":"2025-08-24","location":"","notes":"","image_url":"" },
+      { "id":"JP-Red-FeOx-30g","name":"Red Iron Oxide (R)","vendor":"Just Pigments","category":"Pigment","finish":"—","color":"Red","particle_size_microns":"","solvent_safe":true,"weight_g":30,"volume_ml":null,"price_usd":null,"order_id":"54021","order_date":"2025-08-24","location":"","notes":"","image_url":"" },
+      { "id":"JP-Manganese-Violet-2g","name":"Manganese Violet — Sample","vendor":"Just Pigments","category":"Pigment","finish":"—","color":"Violet","particle_size_microns":"","solvent_safe":true,"weight_g":2,"volume_ml":null,"price_usd":null,"order_id":"54021","order_date":"2025-08-24","location":"","notes":"Sample","image_url":"" },
+      { "id":"JP-DCRed27-2g","name":"D&C Red #27 Aluminum Lake — Sample","vendor":"Just Pigments","category":"Pigment","finish":"—","color":"Red","particle_size_microns":"","solvent_safe":true,"weight_g":2,"volume_ml":null,"price_usd":null,"order_id":"54021","order_date":"2025-08-24","location":"","notes":"Sample","image_url":"" }
     ];
   </script>
 
   <script>
-    // ========= APP LOGIC (ES5 for compatibility) =========
+    // === App logic (search, multi-filters, sort, KPIs, $/g) ===
     function $(s){ return document.querySelector(s); }
     function fmtUSD(n){ return isFinite(n) ? "$" + n.toFixed(2) : "—"; }
     function parseNum(v){ return (v===null || v==="" || typeof v==="undefined") ? null : Number(v); }
@@ -663,8 +315,13 @@
     var DB = Array.isArray(window.__INV__) ? window.__INV__ : [];
     var state = { q:"", vendor:[], category:[], finish:[], sort:"name" };
 
-    function optionize(select, values){
+    function optionize(select, values, includeAllLabel){
       select.innerHTML = "";
+      if (includeAllLabel){
+        var allOpt = document.createElement("option");
+        allOpt.value = "__ALL__"; allOpt.textContent = includeAllLabel;
+        select.appendChild(allOpt);
+      }
       for(var i=0;i<values.length;i++){
         var opt = document.createElement("option");
         opt.value = values[i]; opt.textContent = values[i];
@@ -675,7 +332,7 @@
       var vendors = uniq(DB.map(function(x){return x.vendor;}).filter(Boolean));
       var cats = uniq(DB.map(function(x){return x.category;}).filter(Boolean));
       var fins = uniq(DB.map(function(x){return x.finish;}).filter(Boolean));
-      optionize($("#vendor"), vendors);
+      optionize($("#vendor"), vendors, "All vendors");
       optionize($("#category"), cats);
       optionize($("#finish"), fins);
     }
@@ -702,12 +359,8 @@
       return rows;
     }
 
-    function totalSpend(rows){
-      var s=0,i; for(i=0;i<rows.length;i++){ s += parseNum(rows[i].price_usd) || 0; } return s;
-    }
-    function totalWeight(rows){
-      var s=0,i; for(i=0;i<rows.length;i++){ s += parseNum(rows[i].weight_g) || 0; } return s;
-    }
+    function totalSpend(rows){ var s=0,i; for(i=0;i<rows.length;i++){ s += parseNum(rows[i].price_usd) || 0; } return s; }
+    function totalWeight(rows){ var s=0,i; for(i=0;i<rows.length;i++){ s += parseNum(rows[i].weight_g) || 0; } return s; }
 
     function render(){
       var grid = $("#grid");
@@ -737,9 +390,12 @@
         var item = data[i];
         var card = document.createElement("article"); card.className = "card";
         var imgwrap = document.createElement("div"); imgwrap.className="imgwrap";
-        var img = document.createElement("img"); img.loading="lazy"; img.alt=(item.vendor||"") + " — " + (item.name||"");
-        img.src = item.image_url || ""; if(!item.image_url){ img.remove(); imgwrap.textContent = "no image"; }
-        imgwrap.appendChild(img || document.createComment(''));
+        if(item.image_url){
+          var img = document.createElement("img"); img.loading="lazy"; img.alt=(item.vendor||"")+" — "+(item.name||""); img.src=item.image_url;
+          imgwrap.appendChild(img);
+        } else {
+          imgwrap.textContent = "no image";
+        }
         var body = document.createElement("div"); body.className="card-body";
         var name = document.createElement("h3"); name.className="name"; name.textContent = item.name || "(Unnamed)";
         var meta = document.createElement("div"); meta.className="meta";
@@ -764,20 +420,50 @@
       }
     }
 
+    function handleMultiSelect(e, key){
+      var opts = e.target.selectedOptions || [];
+      var values = [];
+      var sawAll = false;
+      for(var i=0;i<opts.length;i++){
+        if(opts[i].value === "__ALL__") { sawAll = true; break; }
+        values.push(opts[i].value);
+      }
+      if(sawAll){
+        // Treat "All vendors" as no filter
+        e.target.selectedIndex = -1; // clear visual selection
+        state[key] = [];
+      } else {
+        state[key] = values;
+      }
+      render();
+    }
+
+    function clearFilters(){
+      state.q=""; state.vendor=[]; state.category=[]; state.finish=[];
+      $("#q").value="";
+      ["#vendor","#category","#finish"].forEach(function(id){ document.querySelector(id).selectedIndex=-1; });
+      $("#sort").value="name"; state.sort="name";
+      render();
+    }
+
     function initEvents(){
       $("#q").addEventListener("input", function(e){ state.q=e.target.value; render(); });
-      [["#vendor","vendor"],["#category","category"],["#finish","finish"]].forEach(function(pair){
-        var id=pair[0], key=pair[1];
-        document.querySelector(id).addEventListener("change", function(e){
-          var sel=e.target.selectedOptions||[], vals=[], i; for(i=0;i<sel.length;i++){ vals.push(sel[i].value); }
-          state[key]=vals; render();
-        });
-      });
+      document.querySelector("#vendor").addEventListener("change", function(e){ handleMultiSelect(e,"vendor"); });
+      document.querySelector("#category").addEventListener("change", function(e){ handleMultiSelect(e,"category"); });
+      document.querySelector("#finish").addEventListener("change", function(e){ handleMultiSelect(e,"finish"); });
       $("#sort").addEventListener("change", function(e){ state.sort=e.target.value; render(); });
+      $("#clear").addEventListener("click", clearFilters);
     }
 
     (function init(){
-      populateFilters(); initEvents(); render();
+      var vendors = uniq((window.__INV__||[]).map(function(x){return x.vendor;}).filter(Boolean));
+      var cats = uniq((window.__INV__||[]).map(function(x){return x.category;}).filter(Boolean));
+      var fins = uniq((window.__INV__||[]).map(function(x){return x.finish;}).filter(Boolean));
+      optionize(document.querySelector("#vendor"), vendors, "All vendors");
+      optionize(document.querySelector("#category"), cats);
+      optionize(document.querySelector("#finish"), fins);
+      initEvents();
+      render();
     })();
   </script>
 </body>
