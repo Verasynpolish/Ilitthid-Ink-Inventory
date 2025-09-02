@@ -34,6 +34,24 @@
     .price{margin-top:8px;font-size:13px}
     .btn{cursor:pointer;display:inline-flex;gap:8px;align-items:center;background:#111826;border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:10px}
     .btn:hover{border-color:#2b3444}
+    #toTop {
+  display: none;              /* Hidden by default */
+  position: fixed;            /* Fixed position */
+  bottom: 20px;
+  right: 20px;
+  z-index: 99;                /* Make sure it stays on top */
+  font-size: 14px;
+  border: 1px solid var(--border);
+  outline: none;
+  background-color: #111826;
+  color: var(--text);
+  cursor: pointer;
+  padding: 10px 14px;
+  border-radius: 10px;
+}
+#toTop:hover {
+  border-color: #2b3444;
+}
   </style>
 </head>
 <body>
@@ -2119,6 +2137,20 @@ function init(){
   render();
 }
 init();
+  // Show button after scrolling 200px
+window.onscroll = function() {
+  const btn = document.getElementById("toTop");
+  if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+    btn.style.display = "block";
+  } else {
+    btn.style.display = "none";
+  }
+};
+// Scroll to top when clicked
+document.getElementById("toTop").onclick = function() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
 </script>
+<button id="toTop" title="Go to top">↑ Top</button>
 </body>
 </html>
