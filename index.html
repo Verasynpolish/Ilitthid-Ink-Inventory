@@ -2119,19 +2119,23 @@ function init(){
   render();
 }
 init();
-  // Show button after scrolling 200px
-window.onscroll = function() {
+// Back to top button logic
+document.addEventListener("DOMContentLoaded", function() {
   const btn = document.getElementById("toTop");
-  if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
-    btn.style.display = "block";
-  } else {
-    btn.style.display = "none";
-  }
-};
-// Scroll to top when clicked
-document.getElementById("toTop").onclick = function() {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-};
+  if (!btn) return;
+
+  window.addEventListener("scroll", function() {
+    if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+      btn.style.display = "block";
+    } else {
+      btn.style.display = "none";
+    }
+  });
+
+  btn.addEventListener("click", function() {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+});
 </script>
 <button id="toTop" title="Go to top">↑ Top</button>
 </body>
