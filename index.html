@@ -1156,7 +1156,7 @@ window.__INV__ =
     "particle_size_microns": "",
     "solvent_safe": true,
     "weight_g": null,
-    "volume_ml": null,
+    "volume_ml": 473,
     "price_usd": 13.25,
     "order_id": "45609",
     "order_date": "2025-08-25",
@@ -1228,7 +1228,7 @@ window.__INV__ =
     "particle_size_microns": "",
     "solvent_safe": true,
     "weight_g": null,
-    "volume_ml": null,
+    "volume_ml": 473,
     "price_usd": 13.25,
     "order_id": "45609",
     "order_date": "2025-08-25",
@@ -1246,7 +1246,7 @@ window.__INV__ =
     "particle_size_microns": "",
     "solvent_safe": true,
     "weight_g": null,
-    "volume_ml": null,
+    "volume_ml": 473,
     "price_usd": 13.25,
     "order_id": "45609",
     "order_date": "2025-08-25",
@@ -2441,6 +2441,7 @@ function $(s){return document.querySelector(s)}
 function fmtUSD(n){return isFinite(n)?"$"+n.toFixed(2):"—"}
 function num(v){return(v===null||v===""||typeof v==="undefined")?null:Number(v)}
 function cpg(it){var p=num(it.price_usd),g=num(it.weight_g);return(p!==null&&g)?p/g:null}
+function cpml(it){var p=num(it.price_usd), v=num(it.volume_ml);return (p!==null && v) ? p/v : null;}
 var DB = Array.isArray(window.__INV__)?window.__INV__:[];
 function uniq(a){var m={},o=[];for(var i=0;i<a.length;i++){var k=String(a[i]||"");if(k&&!m[k]){m[k]=1;o.push(k)}}o.sort(function(a,b){return String(a).localeCompare(String(b))});return o}
 function populate(){
@@ -2512,6 +2513,8 @@ function render(){
     if(it.volume_ml) parts.push(String(it.volume_ml)+' ml');
     parts.push(it.price_usd!=null?fmtUSD(Number(it.price_usd)):'—');
     parts.push(c!=null?("$"+c.toFixed(2)+"/g"):"$/g N/A");
+    var m=cpml(it);
+    if(it.volume_ml) parts.push(m!=null?("$"+m.toFixed(2)+"/ml"):"$/ml N/A");
     price.innerHTML=parts.join(' · ');
     body.appendChild(name); body.appendChild(meta); body.appendChild(chips); body.appendChild(price);
     card.appendChild(imgwrap); card.appendChild(body); grid.appendChild(card);
