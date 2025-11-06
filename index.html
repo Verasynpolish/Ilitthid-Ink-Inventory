@@ -76,7 +76,7 @@
       <select id="color"><option value="">All colors</option></select>
     </div>
     <div class="control">
-      <label for="sort">Sort</label>
+      <label for="sort">Sort</label
       <select id="sort">
         <option value="name">Name (A→Z)</option>
         <option value="cpgram_asc">Cost/gram (low→high)</option>
@@ -3766,7 +3766,7 @@ var state={q:"",vendor:"",category:"",finish:"",color:"",sort:"name"};
 function filterDB(){
   var q=(state.q||"").toLowerCase();
   var rows = DB.filter(function(it){
-    var hay=[it.name,it.vendor,it.category,it.finish,it.color,it.particle_size_microns,it.order_id,it.notes].join(" ").toLowerCase();
+    var hay=[it.name,it.vendor,it.category,it.finish,it.color,it...icle_size_microns,it.order_id,it.notes].join(" ").toLowerCase();
     var matchQ = !q || hay.indexOf(q)!==-1;
     var mv = !state.vendor || it.vendor===state.vendor;
     var mc = !state.category || it.category===state.category;
@@ -3774,7 +3774,8 @@ function filterDB(){
     var mclr = !state.color || (it.color && it.color.toLowerCase().indexOf(state.color.toLowerCase())!==-1);
     return matchQ && mv && mc && mf && mclr;
   });
-  rows.sort(function(a,b){
+
+rows.sort(function(a,b){
     if(state.sort==='name') return String(a.name).localeCompare(String(b.name));
     if(state.sort==='cpgram_asc') return (cpg(a)||Infinity)-(cpg(b)||Infinity);
     if(state.sort==='cpgram_desc') return (cpg(b)||-Infinity)-(cpg(a)||-Infinity);
@@ -3842,6 +3843,7 @@ function clearFilters(){
   $("#q").value=""; $("#vendor").value=""; $("#category").value=""; $("#finish").value=""; $("#color").value=""; $("#sort").value="name";
   render();
 }
+
 function init(){
   populate();
   $("#q").addEventListener('input', function(e){state.q=e.target.value; render();});
@@ -3854,6 +3856,7 @@ function init(){
   render();
 }
 init();
+
 // Back to top button logic
 document.addEventListener("DOMContentLoaded", function() {
   const btn = document.getElementById("toTop");
